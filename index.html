@@ -3,34 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pakket Toevoegen</title>
+    <title>Pakket Barcode</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Pakket Toevoegen</h1>
+        <h1>Retourpakket aanmelden</h1>
         <form id="pakketForm">
-            <label for="naam">Naam van het pakket:</label>
-            <input type="text" id="naam" name="naam" required>
-
-            <label for="code">Pakketcode:</label>
-            <input type="text" id="code" name="code" required>
-
-            <label for="bedrijf">Verzendbedrijf:</label>
-            <input type="text" id="bedrijf" name="bedrijf" required>
-
-            <label for="bestemming">Bestemming:</label>
-            <input type="text" id="bestemming" name="bestemming" required>
-
-            <button type="submit">Pakket Toevoegen</button>
+            <input type="text" id="pakketNaam" placeholder="Naam pakket" required><br>
+            <input type="text" id="barcodeInput" placeholder="Pakketcode" required><br>
+            <button type="submit">Toevoegen</button>
         </form>
-
-        <h2>Retour Pakketten</h2>
-        <ul id="pakketList">
-            <!-- Hier komen de retourpakketten -->
-        </ul>
+        <canvas id="barcode"></canvas>
+        <div id="pakketLijst"></div>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/jsbarcode/3.11.5/JsBarcode.all.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
