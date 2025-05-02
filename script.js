@@ -1,26 +1,47 @@
-document.getElementById("pakketForm").addEventListener("submit", async function(e) {
-    e.preventDefault();
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("pakketForm");
+    const barcodeCanvas = document.getElementById("barcode");
+    const pakketLijst = document.getElementById("pakketLijst");
 
-    const naam = document.getElementById('naam').value;
-    const code = document.getElementById('code').value;
-    const bedrijf = document.getElementById('bedrijf').value;
-    const bestemming = document.getElementById('bestemming').value;
+    function toonPakketten() {
+        const pakketten = JSON.parse(localStorage.getItem("pakketten") || "[]");
+        pakketLijst.innerHTML = "";
+        pakketten.forEach((pakket, index) => {
+            const div = document.createElement("div");
+            div.className = "pakket";
+            div.innerHTML = `
+                <div>
+                    <strong>${pakket.naam}</strong><br>
+                    <span>${pakket.code}</span>
+                </div>
+                <button onclick="verwijderPakket(${index})">Verwijder</button>
+            `;
+            pakketLijst.appendChild(div);
+        });
+    }
 
-    // Maak een pakketobject
-    const pakket = {
-        naam: naam,
-        code: code,
-        bedrijf: bedrijf,
-        bestemming: bestemming
-    };
+    window.verwijderPakket = function(index) {
+        const pakketten = JSON.parse(localStorage.getItem("pakketten") || "[]");
+        pakketten.splice(index, 1);
+        localStorage.setItem("pakketten", JSON.stringify(pakketten));
+        toonPakketten();
+    }
 
-    // Voeg het pakket toe aan de lijst (client-side)
-    const pakketList = document.getElementById("pakketList");
-    const listItem = document.createElement("li");
-    listItem.textContent = `Pakket: ${naam}, Code: ${code}, Bedrijf: ${bedrijf}, Bestemming: ${bestemming}`;
-    pakketList.appendChild(listItem);
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const naam = document.getElementById("pakketNaam").value;
+        const code = document.getElementById("barcodeInput").value;
 
-    // Hier zou je de data naar de server moeten sturen
-    // Voor nu voegen we het lokaal toe aan de lijst
-    alert("Pakket toegevoegd!");
+        JsBarcode(barcodeCanvas, code, { format: "CODE128", displayValue: true, fontSize: 36 });
+
+        const pakketten = JSON.parse(localStorage.getItem("pakketten") || "[]");
+        pakketten.push({ naam, code });
+        localStorage.setItem("pakketten", JSON.stringify(pakketten));
+
+        document.getElementById("pakketNaam").value = "";
+        document.getElementById("barcodeInput").value = "";
+        toonPakketten();
+    });
+
+    toonPakketten();
 });
